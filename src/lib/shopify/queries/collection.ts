@@ -14,10 +14,9 @@ import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
 import { shopifyQuery } from "../client";
 import {
-  COLLECTION_CORE_FRAGMENT,
-  PRODUCT_CORE_FRAGMENT,
-  METAFIELD_FRAGMENT,
-  PAGE_INFO_FRAGMENT,
+  COLLECTION_FRAGMENTS,
+  COLLECTION_WITH_PRODUCTS_FRAGMENTS,
+  PRODUCT_LIST_FRAGMENTS,
   CACHE_TAGS,
 } from "../constants";
 import { normaliseCollection, normaliseProductCard } from "../normalise";
@@ -35,7 +34,7 @@ import type {
 // ─────────────────────────────────────────────────────────────
 
 const GET_COLLECTION_BY_HANDLE_QUERY = /* GraphQL */ `
-  ${COLLECTION_CORE_FRAGMENT}
+  ${COLLECTION_FRAGMENTS}
   query GetCollectionByHandle($handle: String!) {
     collection(handle: $handle) {
       ...CollectionCoreFields
@@ -44,9 +43,7 @@ const GET_COLLECTION_BY_HANDLE_QUERY = /* GraphQL */ `
 `;
 
 const GET_COLLECTION_PRODUCTS_QUERY = /* GraphQL */ `
-  ${PRODUCT_CORE_FRAGMENT}
-  ${METAFIELD_FRAGMENT}
-  ${PAGE_INFO_FRAGMENT}
+  ${PRODUCT_LIST_FRAGMENTS}
   query GetCollectionProducts(
     $handle: String!
     $first: Int!
@@ -116,8 +113,7 @@ const GET_COLLECTION_PRODUCTS_QUERY = /* GraphQL */ `
 `;
 
 const GET_ALL_COLLECTIONS_QUERY = /* GraphQL */ `
-  ${COLLECTION_CORE_FRAGMENT}
-  ${PAGE_INFO_FRAGMENT}
+  ${COLLECTION_FRAGMENTS}
   query GetAllCollections($first: Int!, $after: String) {
     collections(first: $first, after: $after, sortKey: TITLE) {
       edges {
@@ -127,16 +123,17 @@ const GET_ALL_COLLECTIONS_QUERY = /* GraphQL */ `
         }
       }
       pageInfo {
-        ...PageInfoFields
+        hasNextPage
+        hasPreviousPage
+        startCursor
+        endCursor
       }
     }
   }
 `;
 
 const GET_COLLECTION_WITH_PRODUCTS_QUERY = /* GraphQL */ `
-  ${COLLECTION_CORE_FRAGMENT}
-  ${PRODUCT_CORE_FRAGMENT}
-  ${METAFIELD_FRAGMENT}
+  ${COLLECTION_WITH_PRODUCTS_FRAGMENTS}
   query GetCollectionWithProducts(
     $handle: String!
     $first: Int!
@@ -380,13 +377,12 @@ export async function getCollectionWithProducts(options: {
 
 /**
  * Fetch multiple collections in parallel by handles.
+ *
+ * NOTE: Does NOT use 'use cache' at this level — each inner
+ * getCollectionByHandle call has its own cache entry.
  */
 export async function getCollectionsByHandles(
   handles: string[]
 ): Promise<Array<Collection | null>> {
-  "use cache";
-  cacheLife("hours");
-  cacheTag(CACHE_TAGS.COLLECTIONS);
-
   return Promise.all(handles.map((h) => getCollectionByHandle(h)));
 }

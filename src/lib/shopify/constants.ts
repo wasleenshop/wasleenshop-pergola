@@ -1,14 +1,23 @@
 /**
  * lib/shopify/constants.ts
  *
- * Reusable GraphQL fragments shared across all queries.
- * Centralising fragments here ensures consistency and allows
- * a single edit to propagate across all queries automatically.
+ * Reusable GraphQL fragments for the Shopify Storefront API.
+ *
+ * ARCHITECTURE RULE — Fragment embedding:
+ *  Primitive fragments (IMAGE, MONEY, etc.) contain ONLY their own
+ *  fragment body. Compound fragments (PRODUCT_CORE, CART_LINE, etc.)
+ *  use `...SpreadName` syntax but do NOT embed their dependency fragments.
+ *
+ *  Fragment dependencies are resolved at the QUERY level using the
+ *  *_FRAGMENTS bundle exports below. This ensures each fragment
+ *  definition appears exactly once per GraphQL document, avoiding
+ *  "Fragment already defined" errors from the Shopify API.
  *
  * IMPORTANT: Shopify Storefront API 2024-10.
  */
 
-// ── Primitive fragments ──────────────────────────────────────
+// ── Primitive fragments ──────────────────────────────────────────
+// Self-contained — no spread dependencies.
 
 export const IMAGE_FRAGMENT = /* GraphQL */ `
   fragment ImageFields on Image {
@@ -42,24 +51,6 @@ export const PAGE_INFO_FRAGMENT = /* GraphQL */ `
   }
 `;
 
-// ── Metafield identifiers ────────────────────────────────────
-// Used in product queries via the `metafields(identifiers: [...])` arg.
-
-export const PRODUCT_METAFIELD_IDENTIFIERS = [
-  { namespace: "custom", key: "ded_licensed" },
-  { namespace: "custom", key: "made_in_uae" },
-  { namespace: "custom", key: "installation_included" },
-  { namespace: "custom", key: "dubai_climate_tested" },
-  { namespace: "custom", key: "material" },
-  { namespace: "custom", key: "warranty_years" },
-  { namespace: "custom", key: "is_dropship" },
-  { namespace: "custom", key: "dimensions" },
-  { namespace: "custom", key: "weight_capacity" },
-  { namespace: "custom", key: "color_options" },
-  { namespace: "custom", key: "lead_time_days" },
-  { namespace: "descriptors", key: "subtitle" },
-] as const;
-
 export const METAFIELD_FRAGMENT = /* GraphQL */ `
   fragment MetafieldFields on Metafield {
     id
@@ -70,11 +61,11 @@ export const METAFIELD_FRAGMENT = /* GraphQL */ `
   }
 `;
 
-// ── Variant fragment ─────────────────────────────────────────
+// ── Compound fragments ───────────────────────────────────────────
+// Use `...Spread` syntax. Do NOT embed primitive fragment strings here.
+// Include their dependencies via a *_FRAGMENTS bundle at the query level.
 
 export const PRODUCT_VARIANT_FRAGMENT = /* GraphQL */ `
-  ${IMAGE_FRAGMENT}
-  ${MONEY_FRAGMENT}
   fragment ProductVariantFields on ProductVariant {
     id
     title
@@ -100,13 +91,7 @@ export const PRODUCT_VARIANT_FRAGMENT = /* GraphQL */ `
   }
 `;
 
-// ── Core product fragment (no variants — keeps the payload lean) ─
-
 export const PRODUCT_CORE_FRAGMENT = /* GraphQL */ `
-  ${IMAGE_FRAGMENT}
-  ${MONEY_FRAGMENT}
-  ${SEO_FRAGMENT}
-  ${METAFIELD_FRAGMENT}
   fragment ProductCoreFields on Product {
     id
     handle
@@ -156,12 +141,8 @@ export const PRODUCT_CORE_FRAGMENT = /* GraphQL */ `
   }
 `;
 
-// ── Full product fragment (variants + metafields included) ───
-
+/** Full product fragment — includes variants + all custom metafields. */
 export const PRODUCT_FULL_FRAGMENT = /* GraphQL */ `
-  ${PRODUCT_CORE_FRAGMENT}
-  ${PRODUCT_VARIANT_FRAGMENT}
-  ${METAFIELD_FRAGMENT}
   fragment ProductFullFields on Product {
     ...ProductCoreFields
     variants(first: 100) {
@@ -182,9 +163,18 @@ export const PRODUCT_FULL_FRAGMENT = /* GraphQL */ `
         { namespace: "custom", key: "made_in_uae" }
         { namespace: "custom", key: "installation_included" }
         { namespace: "custom", key: "dubai_climate_tested" }
+        { namespace: "custom", key: "eco_friendly" }
+        { namespace: "custom", key: "super_deal" }
+        { namespace: "custom", key: "wasleen_choice" }
         { namespace: "custom", key: "material" }
         { namespace: "custom", key: "warranty_years" }
         { namespace: "custom", key: "is_dropship" }
+        { namespace: "custom", key: "requires_consultation" }
+        { namespace: "custom", key: "is_custom_design" }
+        { namespace: "custom", key: "deposit_percentage" }
+        { namespace: "custom", key: "installation_cost" }
+        { namespace: "custom", key: "supplier_name" }
+        { namespace: "custom", key: "shipping_origin" }
         { namespace: "custom", key: "dimensions" }
         { namespace: "custom", key: "weight_capacity" }
         { namespace: "custom", key: "color_options" }
@@ -197,11 +187,33 @@ export const PRODUCT_FULL_FRAGMENT = /* GraphQL */ `
   }
 `;
 
-// ── Cart fragment ────────────────────────────────────────────
+export const COLLECTION_CORE_FRAGMENT = /* GraphQL */ `
+  fragment CollectionCoreFields on Collection {
+    id
+    handle
+    title
+    description
+    descriptionHtml
+    updatedAt
+    image {
+      ...ImageFields
+    }
+    seo {
+      ...SEOFields
+    }
+    metafields(
+      identifiers: [
+        { namespace: "custom", key: "hero_video_url" }
+        { namespace: "custom", key: "badge_label" }
+        { namespace: "custom", key: "sort_order" }
+      ]
+    ) {
+      ...MetafieldFields
+    }
+  }
+`;
 
 export const CART_LINE_FRAGMENT = /* GraphQL */ `
-  ${IMAGE_FRAGMENT}
-  ${MONEY_FRAGMENT}
   fragment CartLineFields on CartLine {
     id
     quantity
@@ -253,8 +265,6 @@ export const CART_LINE_FRAGMENT = /* GraphQL */ `
 `;
 
 export const CART_FRAGMENT = /* GraphQL */ `
-  ${CART_LINE_FRAGMENT}
-  ${MONEY_FRAGMENT}
   fragment CartFields on Cart {
     id
     checkoutUrl
@@ -309,42 +319,89 @@ export const CART_FRAGMENT = /* GraphQL */ `
   }
 `;
 
-// ── Collection fragment ──────────────────────────────────────
+// ── Fragment bundles ─────────────────────────────────────────────
+// Embed ONE of these at the top of a query/mutation string.
+// Each bundle includes all fragment definitions needed — exactly once.
 
-export const COLLECTION_CORE_FRAGMENT = /* GraphQL */ `
+/** For product detail queries (full product with variants). */
+export const PRODUCT_FRAGMENTS = /* GraphQL */ `
+  ${IMAGE_FRAGMENT}
+  ${MONEY_FRAGMENT}
+  ${SEO_FRAGMENT}
+  ${METAFIELD_FRAGMENT}
+  ${PRODUCT_CORE_FRAGMENT}
+  ${PRODUCT_VARIANT_FRAGMENT}
+`;
+
+/** For product listing queries (core fields, no variants). */
+export const PRODUCT_LIST_FRAGMENTS = /* GraphQL */ `
+  ${IMAGE_FRAGMENT}
+  ${MONEY_FRAGMENT}
+  ${SEO_FRAGMENT}
+  ${METAFIELD_FRAGMENT}
+  ${PAGE_INFO_FRAGMENT}
+  ${PRODUCT_CORE_FRAGMENT}
+`;
+
+/** For collection-only queries (no products). */
+export const COLLECTION_FRAGMENTS = /* GraphQL */ `
   ${IMAGE_FRAGMENT}
   ${SEO_FRAGMENT}
   ${METAFIELD_FRAGMENT}
-  fragment CollectionCoreFields on Collection {
-    id
-    handle
-    title
-    description
-    descriptionHtml
-    updatedAt
-    image {
-      ...ImageFields
-    }
-    seo {
-      ...SEOFields
-    }
-    metafields(
-      identifiers: [
-        { namespace: "custom", key: "hero_video_url" }
-        { namespace: "custom", key: "badge_label" }
-        { namespace: "custom", key: "sort_order" }
-      ]
-    ) {
-      ...MetafieldFields
-    }
-  }
+  ${COLLECTION_CORE_FRAGMENT}
 `;
 
-// ── Shopify API version ──────────────────────────────────────
+/** For collection queries that include products. */
+export const COLLECTION_WITH_PRODUCTS_FRAGMENTS = /* GraphQL */ `
+  ${IMAGE_FRAGMENT}
+  ${MONEY_FRAGMENT}
+  ${SEO_FRAGMENT}
+  ${METAFIELD_FRAGMENT}
+  ${PAGE_INFO_FRAGMENT}
+  ${COLLECTION_CORE_FRAGMENT}
+  ${PRODUCT_CORE_FRAGMENT}
+`;
+
+/** For all cart queries and mutations. */
+export const CART_FRAGMENTS = /* GraphQL */ `
+  ${IMAGE_FRAGMENT}
+  ${MONEY_FRAGMENT}
+  ${CART_LINE_FRAGMENT}
+  ${CART_FRAGMENT}
+`;
+
+// ── Metafield identifiers ────────────────────────────────────────
+// Used programmatically (e.g. for typed identifier arrays).
+
+export const PRODUCT_METAFIELD_IDENTIFIERS = [
+  { namespace: "custom", key: "ded_licensed" },
+  { namespace: "custom", key: "made_in_uae" },
+  { namespace: "custom", key: "installation_included" },
+  { namespace: "custom", key: "dubai_climate_tested" },
+  { namespace: "custom", key: "eco_friendly" },
+  { namespace: "custom", key: "super_deal" },
+  { namespace: "custom", key: "wasleen_choice" },
+  { namespace: "custom", key: "material" },
+  { namespace: "custom", key: "warranty_years" },
+  { namespace: "custom", key: "is_dropship" },
+  { namespace: "custom", key: "requires_consultation" },
+  { namespace: "custom", key: "is_custom_design" },
+  { namespace: "custom", key: "deposit_percentage" },
+  { namespace: "custom", key: "installation_cost" },
+  { namespace: "custom", key: "supplier_name" },
+  { namespace: "custom", key: "shipping_origin" },
+  { namespace: "custom", key: "dimensions" },
+  { namespace: "custom", key: "weight_capacity" },
+  { namespace: "custom", key: "color_options" },
+  { namespace: "custom", key: "lead_time_days" },
+  { namespace: "descriptors", key: "subtitle" },
+] as const;
+
+// ── Shopify API version ──────────────────────────────────────────
 
 export const SHOPIFY_API_VERSION = "2024-10" as const;
 
-// ── Cache tag prefixes (for tag-based revalidation) ─────────
+// ── Cache tag prefixes (for tag-based revalidation) ─────────────
 
 export const CACHE_TAGS = {
   PRODUCT: "shopify-product",

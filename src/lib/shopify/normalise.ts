@@ -93,8 +93,35 @@ export function normaliseProductMetafields(
       case "dubai_climate_tested":
         result.dubai_climate_tested = parsed as boolean | undefined;
         break;
+      case "eco_friendly":
+        result.eco_friendly = parsed as boolean | undefined;
+        break;
+      case "super_deal":
+        result.super_deal = parsed as boolean | undefined;
+        break;
+      case "wasleen_choice":
+        result.wasleen_choice = parsed as boolean | undefined;
+        break;
       case "is_dropship":
         result.is_dropship = parsed as boolean | undefined;
+        break;
+      case "supplier_name":
+        result.supplier_name = parsed as string | undefined;
+        break;
+      case "shipping_origin":
+        result.shipping_origin = parsed as string | undefined;
+        break;
+      case "requires_consultation":
+        result.requires_consultation = parsed as boolean | undefined;
+        break;
+      case "is_custom_design":
+        result.is_custom_design = parsed as boolean | undefined;
+        break;
+      case "deposit_percentage":
+        result.deposit_percentage = parsed as number | undefined;
+        break;
+      case "installation_cost":
+        result.installation_cost = parsed as number | undefined;
         break;
       case "material":
         result.material = parsed as string | undefined;
@@ -309,6 +336,9 @@ export function normaliseProductCard(raw: any): ProductCard {
     vendor: raw.vendor ?? "",
     tags: raw.tags ?? [],
     metafields: normaliseProductMetafields(rawMetafields),
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    images: (raw.images?.edges ?? []).slice(0, 5).map((e: any) => normaliseImage(e.node)),
+    firstVariantId: raw.variants?.edges?.[0]?.node?.id ?? undefined,
   };
 }
 

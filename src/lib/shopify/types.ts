@@ -97,19 +97,30 @@ export interface CustomAttribute {
 // ── Metafields (normalised — keyed by namespace.key) ─────────
 
 export interface ProductMetafields {
-  // Custom trust badges
+  // Trust badges
   ded_licensed?: boolean;
   made_in_uae?: boolean;
   installation_included?: boolean;
   dubai_climate_tested?: boolean;
+  eco_friendly?: boolean;
+  super_deal?: boolean;
+  wasleen_choice?: boolean;
+  // Fulfillment
   is_dropship?: boolean;
+  supplier_name?: string;
+  shipping_origin?: string;
+  lead_time_days?: number;
+  // Custom design / consultation
+  requires_consultation?: boolean;
+  is_custom_design?: boolean;
+  deposit_percentage?: number;
+  installation_cost?: number;
   // Product specifications
   material?: string;
   warranty_years?: number;
   dimensions?: string;
   weight_capacity?: string;
   color_options?: string[];
-  lead_time_days?: number;
   // Descriptors
   subtitle?: string;
 }
@@ -190,7 +201,19 @@ export type ProductCard = Pick<
   | "vendor"
   | "tags"
   | "metafields"
->;
+> & {
+  /**
+   * First 5 images for hover crossfade and mobile gallery.
+   * Flat array — not a Connection — to keep the card payload minimal.
+   */
+  images: ShopifyImage[];
+  /**
+   * GID of the first available variant.
+   * Used by Quick View "Add to Cart" without variant selection.
+   * Populated by normaliseProductCard when variants(first:1) is in the query.
+   */
+  firstVariantId?: string;
+};
 
 // ── Collection ───────────────────────────────────────────────
 

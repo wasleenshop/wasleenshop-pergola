@@ -11,7 +11,7 @@
 import "server-only";
 
 import { shopifyQuery } from "../client";
-import { CART_FRAGMENT } from "../constants";
+import { CART_FRAGMENTS } from "../constants";
 import { normaliseCart } from "../normalise";
 import type {
   Cart,
@@ -26,7 +26,7 @@ import type {
 // ─────────────────────────────────────────────────────────────
 
 const CART_CREATE_MUTATION = /* GraphQL */ `
-  ${CART_FRAGMENT}
+  ${CART_FRAGMENTS}
   mutation CartCreate($input: CartInput!) {
     cartCreate(input: $input) {
       cart {
@@ -42,7 +42,7 @@ const CART_CREATE_MUTATION = /* GraphQL */ `
 `;
 
 const CART_LINES_ADD_MUTATION = /* GraphQL */ `
-  ${CART_FRAGMENT}
+  ${CART_FRAGMENTS}
   mutation CartLinesAdd($cartId: ID!, $lines: [CartLineInput!]!) {
     cartLinesAdd(cartId: $cartId, lines: $lines) {
       cart {
@@ -58,7 +58,7 @@ const CART_LINES_ADD_MUTATION = /* GraphQL */ `
 `;
 
 const CART_LINES_UPDATE_MUTATION = /* GraphQL */ `
-  ${CART_FRAGMENT}
+  ${CART_FRAGMENTS}
   mutation CartLinesUpdate($cartId: ID!, $lines: [CartLineUpdateInput!]!) {
     cartLinesUpdate(cartId: $cartId, lines: $lines) {
       cart {
@@ -74,7 +74,7 @@ const CART_LINES_UPDATE_MUTATION = /* GraphQL */ `
 `;
 
 const CART_LINES_REMOVE_MUTATION = /* GraphQL */ `
-  ${CART_FRAGMENT}
+  ${CART_FRAGMENTS}
   mutation CartLinesRemove($cartId: ID!, $lineIds: [ID!]!) {
     cartLinesRemove(cartId: $cartId, lineIds: $lineIds) {
       cart {
@@ -90,7 +90,7 @@ const CART_LINES_REMOVE_MUTATION = /* GraphQL */ `
 `;
 
 const CART_BUYER_IDENTITY_UPDATE_MUTATION = /* GraphQL */ `
-  ${CART_FRAGMENT}
+  ${CART_FRAGMENTS}
   mutation CartBuyerIdentityUpdate(
     $cartId: ID!
     $buyerIdentity: CartBuyerIdentityInput!
@@ -109,7 +109,7 @@ const CART_BUYER_IDENTITY_UPDATE_MUTATION = /* GraphQL */ `
 `;
 
 const CART_DISCOUNT_CODES_UPDATE_MUTATION = /* GraphQL */ `
-  ${CART_FRAGMENT}
+  ${CART_FRAGMENTS}
   mutation CartDiscountCodesUpdate($cartId: ID!, $discountCodes: [String!]!) {
     cartDiscountCodesUpdate(cartId: $cartId, discountCodes: $discountCodes) {
       cart {
@@ -125,7 +125,7 @@ const CART_DISCOUNT_CODES_UPDATE_MUTATION = /* GraphQL */ `
 `;
 
 const CART_NOTE_UPDATE_MUTATION = /* GraphQL */ `
-  ${CART_FRAGMENT}
+  ${CART_FRAGMENTS}
   mutation CartNoteUpdate($cartId: ID!, $note: String!) {
     cartNoteUpdate(cartId: $cartId, note: $note) {
       cart {
@@ -141,7 +141,7 @@ const CART_NOTE_UPDATE_MUTATION = /* GraphQL */ `
 `;
 
 const CART_ATTRIBUTES_UPDATE_MUTATION = /* GraphQL */ `
-  ${CART_FRAGMENT}
+  ${CART_FRAGMENTS}
   mutation CartAttributesUpdate(
     $cartId: ID!
     $attributes: [AttributeInput!]!

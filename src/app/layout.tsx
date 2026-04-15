@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display, Tajawal } from "next/font/google";
 import "./globals.css";
+import { TrustBanner } from "@/components/layout/TrustBanner";
+import { Header } from "@/components/layout/Header";
+import { Footer } from "@/components/layout/Footer";
 
 /* ── Google Fonts — self-hosted via next/font ─────────────── */
 
@@ -87,7 +90,10 @@ export default function RootLayout({
       className={`${inter.variable} ${playfair.variable} ${tajawal.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans bg-sand text-primary">
+        <TrustBanner />
+        <Header />
         {children}
+        <Footer />
       </body>
     </html>
   );

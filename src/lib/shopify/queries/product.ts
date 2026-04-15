@@ -9,8 +9,6 @@
  *  - `'use cache'` + `cacheLife('minutes')` for product listings
  *    (refresh more frequently for inventory accuracy)
  *  - Cache tags applied per-product for surgical invalidation.
- *
- * ZERO-HARDCODING LAW: No content hardcoded — all data from Shopify.
  */
 
 import "server-only";
@@ -18,10 +16,9 @@ import "server-only";
 import { cacheLife, cacheTag } from "next/cache";
 import { shopifyQuery } from "../client";
 import {
+  PRODUCT_FRAGMENTS,
+  PRODUCT_LIST_FRAGMENTS,
   PRODUCT_FULL_FRAGMENT,
-  PRODUCT_CORE_FRAGMENT,
-  METAFIELD_FRAGMENT,
-  PAGE_INFO_FRAGMENT,
   CACHE_TAGS,
 } from "../constants";
 import { normaliseProduct, normaliseProductCard } from "../normalise";
@@ -36,6 +33,7 @@ import type {
 // ─────────────────────────────────────────────────────────────
 
 const GET_PRODUCT_BY_HANDLE_QUERY = /* GraphQL */ `
+  ${PRODUCT_FRAGMENTS}
   ${PRODUCT_FULL_FRAGMENT}
   query GetProductByHandle($handle: String!) {
     product(handle: $handle) {
@@ -45,6 +43,7 @@ const GET_PRODUCT_BY_HANDLE_QUERY = /* GraphQL */ `
 `;
 
 const GET_PRODUCT_BY_ID_QUERY = /* GraphQL */ `
+  ${PRODUCT_FRAGMENTS}
   ${PRODUCT_FULL_FRAGMENT}
   query GetProductById($id: ID!) {
     product(id: $id) {
@@ -54,9 +53,7 @@ const GET_PRODUCT_BY_ID_QUERY = /* GraphQL */ `
 `;
 
 const GET_PRODUCTS_QUERY = /* GraphQL */ `
-  ${PRODUCT_CORE_FRAGMENT}
-  ${PAGE_INFO_FRAGMENT}
-  ${METAFIELD_FRAGMENT}
+  ${PRODUCT_LIST_FRAGMENTS}
   query GetProducts(
     $first: Int!
     $after: String
@@ -81,7 +78,6 @@ const GET_PRODUCTS_QUERY = /* GraphQL */ `
               { namespace: "custom", key: "made_in_uae" }
               { namespace: "custom", key: "installation_included" }
               { namespace: "custom", key: "dubai_climate_tested" }
-              { namespace: "custom", key: "material" }
               { namespace: "custom", key: "warranty_years" }
               { namespace: "custom", key: "is_dropship" }
               { namespace: "descriptors", key: "subtitle" }
@@ -115,8 +111,7 @@ const GET_PRODUCTS_QUERY = /* GraphQL */ `
 `;
 
 const GET_PRODUCT_RECOMMENDATIONS_QUERY = /* GraphQL */ `
-  ${PRODUCT_CORE_FRAGMENT}
-  ${METAFIELD_FRAGMENT}
+  ${PRODUCT_LIST_FRAGMENTS}
   query GetProductRecommendations($productId: ID!) {
     productRecommendations(productId: $productId) {
       ...ProductCoreFields
@@ -144,9 +139,7 @@ const GET_PRODUCT_RECOMMENDATIONS_QUERY = /* GraphQL */ `
 `;
 
 const SEARCH_PRODUCTS_QUERY = /* GraphQL */ `
-  ${PRODUCT_CORE_FRAGMENT}
-  ${METAFIELD_FRAGMENT}
-  ${PAGE_INFO_FRAGMENT}
+  ${PRODUCT_LIST_FRAGMENTS}
   query SearchProducts(
     $query: String!
     $first: Int!
@@ -361,13 +354,12 @@ export async function searchProducts(options: {
 /**
  * Fetch multiple products in parallel by handles.
  * Used for featured/curated product grids.
+ *
+ * NOTE: Does NOT use 'use cache' at this level — each inner
+ * getProductByHandle call has its own cache entry.
  */
 export async function getProductsByHandles(
   handles: string[]
 ): Promise<Array<Product | null>> {
-  "use cache";
-  cacheLife("hours");
-  cacheTag(CACHE_TAGS.PRODUCTS);
-
   return Promise.all(handles.map((handle) => getProductByHandle(handle)));
 }

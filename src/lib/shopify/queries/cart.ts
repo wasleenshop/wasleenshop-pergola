@@ -10,7 +10,7 @@
 import "server-only";
 
 import { shopifyQuery } from "../client";
-import { CART_FRAGMENT } from "../constants";
+import { CART_FRAGMENTS } from "../constants";
 import { normaliseCart } from "../normalise";
 import type { Cart } from "../types";
 
@@ -19,7 +19,7 @@ import type { Cart } from "../types";
 // ─────────────────────────────────────────────────────────────
 
 const GET_CART_QUERY = /* GraphQL */ `
-  ${CART_FRAGMENT}
+  ${CART_FRAGMENTS}
   query GetCart($cartId: ID!) {
     cart(id: $cartId) {
       ...CartFields

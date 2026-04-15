@@ -1,48 +1,13 @@
-export type Maybe<T> = T | null;
-
-export interface Connection<T> {
-  edges: Array<Edge<T>>;
-  pageInfo: PageInfo;
-}
-
-export interface Edge<T> {
-  node: T;
-  cursor: string;
-}
-
-export interface PageInfo {
-  hasNextPage: boolean;
-  hasPreviousPage: boolean;
-  startCursor?: string;
-  endCursor?: string;
-}
-
-export interface Image {
-  url: string;
-  altText: string;
-  width: number;
-  height: number;
-}
-
-export interface MoneyV2 {
-  amount: string;
-  currencyCode: string;
-}
-
-export interface Metafield {
-  id: string;
-  namespace: string;
-  key: string;
-  value: string;
-  type: string;
-}
-
-export interface SEO {
-  title: string;
-  description: string;
-}
-
-export interface CustomAttribute {
-  key: string;
-  value: string;
-}
+// Canonical types live in src/lib/shopify/types.ts — re-exported here for backwards compatibility.
+// Import directly from "@/lib/shopify/types" in new code.
+export type {
+  Maybe,
+  Connection,
+  Edge,
+  PageInfo,
+  MoneyV2,
+  ShopifyImage,
+  SEO,
+  Metafield,
+  CustomAttribute,
+} from "@/lib/shopify/types";

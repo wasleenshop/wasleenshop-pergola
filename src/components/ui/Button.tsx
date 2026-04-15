@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 import { Spinner } from "./Spinner";
 
 export interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "outline" | "ghost";
+  variant?: "primary" | "secondary" | "outline" | "ghost" | "ghost-light";
   size?: "sm" | "md" | "lg";
   isLoading?: boolean;
 }
@@ -12,11 +12,12 @@ export const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant = "primary", size = "md", isLoading, children, disabled, ...props }, ref) => {
     
     // Map variants to our design system globals.css custom classes
-    const variantClasses = {
+    const variantClasses: Record<NonNullable<ButtonProps["variant"]>, string> = {
       primary: "btn-primary",
       secondary: "btn-secondary",
-      outline: "btn-secondary", // Mapping outline to secondary from globals.css
+      outline: "btn-secondary",
       ghost: "btn-ghost",
+      "ghost-light": "btn-ghost-light",
     };
 
     const sizeClasses = {
