@@ -4,6 +4,11 @@ import "./globals.css";
 import { TrustBanner } from "@/components/layout/TrustBanner";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { CartProvider } from "@/components/cart/CartContext";
+import { CartDrawer } from "@/components/cart/CartDrawer";
+import { getInitialCart } from "@/lib/shopify/actions/cart";
+import { CustomerProvider } from "@/contexts/CustomerContext";
+import { getInitialCustomer } from "@/lib/shopify/customer-operations";
 
 /* ── Google Fonts — self-hosted via next/font ─────────────── */
 
@@ -78,11 +83,18 @@ export const metadata: Metadata = {
 
 /* ── Root Layout ──────────────────────────────────────────── */
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  // Fetch cart + customer in parallel — both are server-side reads from
+  // httpOnly cookies, so there is zero loading flash on first render.
+  const [initialCart, initialCustomer] = await Promise.all([
+    getInitialCart(),
+    getInitialCustomer(),
+  ]);
+
   return (
     <html
       lang="en"
@@ -90,10 +102,16 @@ export default function RootLayout({
       className={`${inter.variable} ${playfair.variable} ${tajawal.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans bg-sand text-primary">
-        <TrustBanner />
-        <Header />
-        {children}
-        <Footer />
+        <CustomerProvider initialCustomer={initialCustomer}>
+          <CartProvider initialCart={initialCart}>
+            <TrustBanner />
+            <Header />
+            {children}
+            <Footer />
+            {/* Portal-rendered — mounts to document.body via createPortal */}
+            <CartDrawer />
+          </CartProvider>
+        </CustomerProvider>
       </body>
     </html>
   );

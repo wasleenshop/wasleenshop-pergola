@@ -7,6 +7,12 @@ import type { ShopifyImage } from "@/lib/shopify/types";
 import { cn } from "@/lib/utils";
 
 // ─────────────────────────────────────────────────────────────────
+// Constants
+// ─────────────────────────────────────────────────────────────────
+
+const MAX_IMAGES = 4;
+
+// ─────────────────────────────────────────────────────────────────
 // Types
 // ─────────────────────────────────────────────────────────────────
 
@@ -22,14 +28,17 @@ export interface QuickViewGalleryProps {
 // ─────────────────────────────────────────────────────────────────
 
 export function QuickViewGallery({
-  images,
+  images: rawImages,
   title,
   priority = false,
 }: QuickViewGalleryProps) {
-  const [current, setCurrent]   = useState(0);
-  const pointerStart             = useRef<{ x: number; time: number } | null>(null);
-  const isDragging               = useRef(false);
-  const containerRef             = useRef<HTMLDivElement>(null);
+  // Cap to MAX_IMAGES per spec ("Max 3-4 images")
+  const images = rawImages.slice(0, MAX_IMAGES);
+
+  const [current, setCurrent]  = useState(0);
+  const pointerStart            = useRef<{ x: number; time: number } | null>(null);
+  const isDragging              = useRef(false);
+  const containerRef            = useRef<HTMLDivElement>(null);
 
   const count   = images.length;
   const canPrev = current > 0;
@@ -37,6 +46,9 @@ export function QuickViewGallery({
 
   const prev = useCallback(() => setCurrent((i) => Math.max(0, i - 1)), []);
   const next = useCallback(() => setCurrent((i) => Math.min(count - 1, i + 1)), [count]);
+
+  // Reset to first image when the images array changes (new product opened)
+  useEffect(() => { setCurrent(0); }, [rawImages]);
 
   // ── Keyboard navigation ───────────────────────────────────────
   useEffect(() => {
@@ -75,7 +87,7 @@ export function QuickViewGallery({
 
     if (isDragging.current && (Math.abs(dx) > 60 || velocity > 0.5)) {
       if (dx < 0) next();
-      else         prev();
+      else        prev();
     }
 
     pointerStart.current = null;
