@@ -1,26 +1,871 @@
+/* ============================================================
+ * WASLEEN PERGOLAS — DESERT LUXURY DESIGN SYSTEM
+ * Tailwind CSS v4 — All theme tokens live here via @theme {}
+ * ============================================================ */
+
 @import "tailwindcss";
+@import "../styles/animations.css";
+
+/* ============================================================
+ * TAILWIND v4 THEME TOKENS
+ * Using @theme to register CSS custom properties as Tailwind
+ * design tokens (v4 replaces tailwind.config.ts extend).
+ * ============================================================ */
+
+@theme {
+  /* ── Brand Colors ─────────────────────────────────────────── */
+  --color-primary:        #1A1614;
+  --color-primary-light:  #2E2825;
+  --color-primary-dark:   #0D0B0A;
+
+  --color-gold:           #C9A962;
+  --color-gold-light:     #DFC48A;
+  --color-gold-dark:      #A88A42;
+  --color-gold-muted:     #C9A96233; /* 20% opacity */
+
+  --color-sand:           #F5F1EB;
+  --color-sand-dark:      #EAE3D5;
+  --color-sand-darker:    #D8CFBF;
+
+  --color-white:          #FFFFFF;
+  --color-off-white:      #FDFBF8;
+
+  /* ── Neutral Greys ────────────────────────────────────────── */
+  --color-neutral-50:     #FAFAFA;
+  --color-neutral-100:    #F4F4F5;
+  --color-neutral-200:    #E4E4E7;
+  --color-neutral-300:    #D4D4D8;
+  --color-neutral-400:    #A1A1AA;
+  --color-neutral-500:    #71717A;
+  --color-neutral-600:    #52525B;
+  --color-neutral-700:    #3F3F46;
+  --color-neutral-800:    #27272A;
+  --color-neutral-900:    #18181B;
+
+  /* ── Semantic Colors ──────────────────────────────────────── */
+  --color-success:        #22C55E;
+  --color-warning:        #F59E0B;
+  --color-error:          #EF4444;
+  --color-info:           #3B82F6;
+
+  /* ── Typography ───────────────────────────────────────────── */
+  --font-heading:  var(--font-playfair), "Playfair Display", Georgia, serif;
+  --font-sans:     var(--font-inter), "Inter", system-ui, sans-serif;
+  --font-arabic:   var(--font-tajawal), "Tajawal", "Noto Sans Arabic", sans-serif;
+
+  /* ── Font Sizes (8px / 1.25 modular scale, mobile-first) ─── */
+  --text-2xs:   0.625rem;   /* 10px */
+  --text-xs:    0.75rem;    /* 12px */
+  --text-sm:    0.875rem;   /* 14px */
+  --text-base:  1rem;       /* 16px */
+  --text-lg:    1.125rem;   /* 18px */
+  --text-xl:    1.25rem;    /* 20px */
+  --text-2xl:   1.5rem;     /* 24px */
+  --text-3xl:   1.875rem;   /* 30px */
+  --text-4xl:   2.25rem;    /* 36px */
+  --text-5xl:   3rem;       /* 48px */
+  --text-6xl:   3.75rem;    /* 60px */
+  --text-7xl:   4.5rem;     /* 72px */
+  --text-8xl:   6rem;       /* 96px */
+
+  /* ── Line Heights ─────────────────────────────────────────── */
+  --leading-none:   1;
+  --leading-tight:  1.25;
+  --leading-snug:   1.375;
+  --leading-normal: 1.5;
+  --leading-relaxed:1.625;
+  --leading-loose:  2;
+
+  /* ── Letter Spacing ───────────────────────────────────────── */
+  --tracking-tighter: -0.05em;
+  --tracking-tight:   -0.025em;
+  --tracking-normal:  0em;
+  --tracking-wide:    0.025em;
+  --tracking-wider:   0.05em;
+  --tracking-widest:  0.1em;
+  --tracking-luxury:  0.15em;  /* used for premium labels */
+
+  /* ── Spacing (8px grid) ───────────────────────────────────── */
+  --spacing-0:    0rem;
+  --spacing-0-5:  0.125rem;  /* 2px */
+  --spacing-1:    0.25rem;   /* 4px */
+  --spacing-1-5:  0.375rem;  /* 6px */
+  --spacing-2:    0.5rem;    /* 8px  ← base grid unit */
+  --spacing-2-5:  0.625rem;  /* 10px */
+  --spacing-3:    0.75rem;   /* 12px */
+  --spacing-3-5:  0.875rem;  /* 14px */
+  --spacing-4:    1rem;      /* 16px */
+  --spacing-5:    1.25rem;   /* 20px */
+  --spacing-6:    1.5rem;    /* 24px */
+  --spacing-7:    1.75rem;   /* 28px */
+  --spacing-8:    2rem;      /* 32px */
+  --spacing-9:    2.25rem;   /* 36px */
+  --spacing-10:   2.5rem;    /* 40px */
+  --spacing-11:   2.75rem;   /* 44px */
+  --spacing-12:   3rem;      /* 48px */
+  --spacing-14:   3.5rem;    /* 56px */
+  --spacing-16:   4rem;      /* 64px */
+  --spacing-20:   5rem;      /* 80px */
+  --spacing-24:   6rem;      /* 96px */
+  --spacing-28:   7rem;      /* 112px */
+  --spacing-32:   8rem;      /* 128px */
+  --spacing-36:   9rem;      /* 144px */
+  --spacing-40:   10rem;     /* 160px */
+  --spacing-44:   11rem;     /* 176px */
+  --spacing-48:   12rem;     /* 192px */
+  --spacing-56:   14rem;     /* 224px */
+  --spacing-64:   16rem;     /* 256px */
+  --spacing-72:   18rem;     /* 288px */
+  --spacing-80:   20rem;     /* 320px */
+  --spacing-96:   24rem;     /* 384px */
+
+  /* ── Border Radius ────────────────────────────────────────── */
+  --radius-none:  0;
+  --radius-sm:    0.125rem;  /* 2px */
+  --radius-base:  0.25rem;   /* 4px */
+  --radius-md:    0.375rem;  /* 6px */
+  --radius-lg:    0.5rem;    /* 8px */
+  --radius-xl:    0.75rem;   /* 12px */
+  --radius-2xl:   1rem;      /* 16px */
+  --radius-3xl:   1.5rem;    /* 24px */
+  --radius-full:  9999px;
+
+  /* ── Shadows ──────────────────────────────────────────────── */
+  --shadow-sm:
+    0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-base:
+    0 1px 3px 0 rgb(0 0 0 / 0.1),
+    0 1px 2px -1px rgb(0 0 0 / 0.1);
+  --shadow-md:
+    0 4px 6px -1px rgb(0 0 0 / 0.1),
+    0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg:
+    0 10px 15px -3px rgb(0 0 0 / 0.1),
+    0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --shadow-xl:
+    0 20px 25px -5px rgb(0 0 0 / 0.1),
+    0 8px 10px -6px rgb(0 0 0 / 0.1);
+  --shadow-2xl:
+    0 25px 50px -12px rgb(0 0 0 / 0.25);
+  --shadow-gold:
+    0 4px 24px 0 rgb(201 169 98 / 0.25);
+  --shadow-gold-lg:
+    0 8px 40px 0 rgb(201 169 98 / 0.35);
+  --shadow-inner:
+    inset 0 2px 4px 0 rgb(0 0 0 / 0.05);
+
+  /* ── Breakpoints ──────────────────────────────────────────── */
+  --breakpoint-xs:  360px;
+  --breakpoint-sm:  640px;
+  --breakpoint-md:  768px;
+  --breakpoint-lg:  1024px;
+  --breakpoint-xl:  1280px;
+  --breakpoint-2xl: 1536px;
+
+  /* ── Z-index layers ───────────────────────────────────────── */
+  --z-base:    0;
+  --z-raised:  10;
+  --z-dropdown:20;
+  --z-sticky:  30;
+  --z-overlay: 40;
+  --z-modal:   50;
+  --z-popover: 60;
+  --z-toast:   70;
+  --z-tooltip: 80;
+
+  /* ── Transitions ──────────────────────────────────────────── */
+  --transition-fast:   150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base:   250ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow:   400ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-spring: 500ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ── Animation Durations ──────────────────────────────────── */
+  --duration-75:   75ms;
+  --duration-100:  100ms;
+  --duration-150:  150ms;
+  --duration-200:  200ms;
+  --duration-300:  300ms;
+  --duration-500:  500ms;
+  --duration-700:  700ms;
+  --duration-1000: 1000ms;
+
+  /* ── Custom Animation keyframes registered for Tailwind ───── */
+  --animate-fade-in-up:    fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-fade-in:       fadeIn 0.4s ease both;
+  --animate-fade-out:      fadeOut 0.3s ease both;
+  --animate-slide-in-left: slideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-slide-in-right:slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+  --animate-scale-in:      scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+  --animate-shimmer:        shimmer 1.8s linear infinite;
+  --animate-scroll:         scroll 30s linear infinite;
+  --animate-pulse-gold:     pulseGold 2s ease-in-out infinite;
+  --animate-float:          float 4s ease-in-out infinite;
+  --animate-spin-slow:      spin 8s linear infinite;
+}
+
+/* ============================================================
+ * CSS CUSTOM PROPERTIES (runtime variables, not Tailwind tokens)
+ * These respond to dark mode & are available in all components.
+ * ============================================================ */
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  /* ── Semantic Surfaces ────────────────────────────────────── */
+  --bg-page:          var(--color-sand);
+  --bg-elevated:      var(--color-white);
+  --bg-sunken:        var(--color-sand-dark);
+  --bg-inverse:       var(--color-primary);
+
+  /* ── Semantic Text ────────────────────────────────────────── */
+  --text-primary:     var(--color-primary);
+  --text-secondary:   var(--color-neutral-600);
+  --text-muted:       var(--color-neutral-400);
+  --text-inverse:     var(--color-sand);
+  --text-gold:        var(--color-gold);
+
+  /* ── Semantic Borders ─────────────────────────────────────── */
+  --border-subtle:    var(--color-sand-darker);
+  --border-default:   var(--color-neutral-200);
+  --border-strong:    var(--color-neutral-400);
+  --border-gold:      var(--color-gold);
+
+  /* ── Layout ───────────────────────────────────────────────── */
+  --container-max:    1280px;
+  --container-px:     1.5rem;           /* 24px mobile */
+  --header-height:    4rem;             /* 64px */
+  --header-height-lg: 5rem;             /* 80px */
+
+  /* ── Overlay ──────────────────────────────────────────────── */
+  --overlay-dark:      rgb(26 22 20 / 0.7);
+  --overlay-medium:    rgb(26 22 20 / 0.4);
+
+  /* ── Gold Gradient (brand CTA) ────────────────────────────── */
+  --gradient-gold:
+    linear-gradient(135deg, var(--color-gold-dark) 0%, var(--color-gold) 50%, var(--color-gold-light) 100%);
+  --gradient-gold-radial:
+    radial-gradient(ellipse at center, var(--color-gold-light) 0%, var(--color-gold-dark) 100%);
+  --gradient-dark:
+    linear-gradient(180deg, var(--color-primary-light) 0%, var(--color-primary-dark) 100%);
+  --gradient-sand:
+    linear-gradient(180deg, var(--color-off-white) 0%, var(--color-sand) 100%);
+  --gradient-hero-overlay:
+    linear-gradient(to bottom, rgb(26 22 20 / 0.2) 0%, rgb(26 22 20 / 0.65) 100%);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+/* ============================================================
+ * BASE / RESET
+ * ============================================================ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  /* Prevent font scaling on iOS orientation change */
+  -webkit-text-size-adjust: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--bg-page);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  min-height: 100dvh;
+  overflow-x: hidden;
+}
+
+/* Focus styles — keyboard accessible, invisible on mouse */
+:focus-visible {
+  outline: 2px solid var(--color-gold);
+  outline-offset: 3px;
+  border-radius: var(--radius-sm);
+}
+
+/* Smooth anchor scrolling — respect motion preference */
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Images/Media */
+img,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ============================================================
+ * TYPOGRAPHY CLASSES
+ * Predefined classes that apply the Desert Luxury type scale.
+ * ============================================================ */
+
+/* Display — hero headlines */
+.type-display-xl {
+  font-family: var(--font-heading);
+  font-size: clamp(2.5rem, 6vw, 4.5rem);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.type-display-lg {
+  font-family: var(--font-heading);
+  font-size: clamp(2rem, 4.5vw, 3.75rem);
+  font-weight: 700;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.type-display-md {
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 3.5vw, 3rem);
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+}
+
+/* Headings */
+.type-h1 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.875rem, 3vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+}
+
+.type-h2 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.5rem, 2.5vw, 2rem);
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+}
+
+.type-h3 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.type-h4 {
+  font-family: var(--font-heading);
+  font-size: clamp(1.125rem, 1.5vw, 1.5rem);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+.type-h5 {
+  font-family: var(--font-sans);
+  font-size: clamp(1rem, 1.2vw, 1.25rem);
+  font-weight: 600;
+  line-height: 1.4;
+}
+
+/* Body copy */
+.type-body-lg {
+  font-family: var(--font-sans);
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+
+.type-body {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  line-height: 1.625;
+}
+
+.type-body-sm {
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+
+/* Labels & UI text */
+.type-label-lg {
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.01em;
+}
+
+.type-label {
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 500;
+  line-height: 1.4;
+  letter-spacing: 0.02em;
+}
+
+.type-overline {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  line-height: 1.4;
+  letter-spacing: var(--tracking-luxury);
+  text-transform: uppercase;
+}
+
+/* Gold overline — luxury accent */
+.type-overline-gold {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: var(--tracking-luxury);
+  text-transform: uppercase;
+  color: var(--color-gold);
+}
+
+/* Arabic typography */
+.type-arabic {
+  font-family: var(--font-arabic);
+  direction: rtl;
+  line-height: 1.8;
+}
+
+.type-arabic-h {
+  font-family: var(--font-arabic);
+  direction: rtl;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+/* ============================================================
+ * LAYOUT UTILITIES
+ * ============================================================ */
+
+.container-site {
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--container-px);
+}
+
+@media (min-width: 768px) {
+  .container-site {
+    --container-px: 2rem; /* 32px */
+  }
+}
+
+@media (min-width: 1280px) {
+  .container-site {
+    --container-px: 3rem; /* 48px */
+  }
+}
+
+.section-py {
+  padding-block: 4rem;
+}
+
+@media (min-width: 768px) {
+  .section-py {
+    padding-block: 6rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .section-py {
+    padding-block: 8rem;
+  }
+}
+
+/* ============================================================
+ * COMPONENT UTILITY CLASSES
+ * ============================================================ */
+
+/* ── Buttons ──────────────────────────────────────────────── */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  font-family: var(--font-sans);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  line-height: 1;
+  text-decoration: none;
+  white-space: nowrap;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: color var(--transition-base), background-color var(--transition-base),
+              border-color var(--transition-base), box-shadow var(--transition-base),
+              transform var(--transition-fast);
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.btn:disabled,
+.btn[aria-disabled="true"] {
+  opacity: 0.5;
+  pointer-events: none;
+  cursor: not-allowed;
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+/* Primary CTA — Gold */
+.btn-primary {
+  background: var(--gradient-gold);
+  color: var(--color-primary);
+  border-color: transparent;
+  padding: 0.875rem 2rem;
+  border-radius: var(--radius-full);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  box-shadow: var(--shadow-gold);
+}
+
+.btn-primary:hover {
+  box-shadow: var(--shadow-gold-lg);
+  filter: brightness(1.08);
+}
+
+/* Secondary — Outline Gold */
+.btn-secondary {
+  background: transparent;
+  color: var(--color-gold);
+  border-color: var(--color-gold);
+  padding: 0.875rem 2rem;
+  border-radius: var(--radius-full);
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+
+.btn-secondary:hover {
+  background: var(--color-gold-muted);
+}
+
+/* Ghost — Dark */
+.btn-ghost {
+  background: transparent;
+  color: var(--color-primary);
+  border-color: var(--color-primary);
+  padding: 0.875rem 2rem;
+  border-radius: var(--radius-full);
+}
+
+.btn-ghost:hover {
+  background: var(--color-primary);
+  color: var(--color-sand);
+}
+
+/* Ghost — On Dark Backgrounds */
+.btn-ghost-light {
+  background: transparent;
+  color: var(--color-sand);
+  border-color: rgb(245 241 235 / 0.5);
+  padding: 0.875rem 2rem;
+  border-radius: var(--radius-full);
+}
+
+.btn-ghost-light:hover {
+  background: rgb(245 241 235 / 0.15);
+  border-color: var(--color-sand);
+}
+
+/* Icon Button */
+.btn-icon {
+  padding: 0.75rem;
+  border-radius: var(--radius-full);
+}
+
+/* Size modifiers */
+.btn-sm {
+  padding: 0.625rem 1.25rem;
+  font-size: 0.8125rem;
+}
+
+.btn-lg {
+  padding: 1.125rem 2.5rem;
+  font-size: 1.0625rem;
+}
+
+.btn-xl {
+  padding: 1.25rem 3rem;
+  font-size: 1.125rem;
+}
+
+/* ── Cards ────────────────────────────────────────────────── */
+
+.card {
+  background: var(--color-white);
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  box-shadow: var(--shadow-base);
+  transition: box-shadow var(--transition-base), transform var(--transition-base);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-xl);
+  transform: translateY(-4px);
+}
+
+.card-sand {
+  background: var(--color-sand);
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+}
+
+.card-dark {
+  background: var(--color-primary-light);
+  border-radius: var(--radius-2xl);
+  overflow: hidden;
+  color: var(--color-sand);
+}
+
+/* ── Badges ───────────────────────────────────────────────── */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.badge-gold {
+  background: var(--color-gold-muted);
+  color: var(--color-gold-dark);
+  border: 1px solid rgb(201 169 98 / 0.3);
+}
+
+.badge-dark {
+  background: var(--color-primary);
+  color: var(--color-gold);
+}
+
+.badge-sand {
+  background: var(--color-sand-dark);
+  color: var(--color-neutral-600);
+}
+
+/* ── Dividers ─────────────────────────────────────────────── */
+
+.divider-gold {
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    var(--color-gold) 30%,
+    var(--color-gold) 70%,
+    transparent 100%
+  );
+  border: none;
+}
+
+.accent-line {
+  display: block;
+  width: 3rem;
+  height: 2px;
+  background: var(--gradient-gold);
+  border-radius: var(--radius-full);
+}
+
+.accent-line-center {
+  display: block;
+  width: 3rem;
+  height: 2px;
+  background: var(--gradient-gold);
+  border-radius: var(--radius-full);
+  margin-inline: auto;
+}
+
+/* ── Forms ────────────────────────────────────────────────── */
+
+.input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  font-family: var(--font-sans);
+  font-size: 0.9375rem;
+  line-height: 1.5;
+  color: var(--color-primary);
+  background: var(--color-white);
+  border: 1.5px solid var(--border-default);
+  border-radius: var(--radius-lg);
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+  outline: none;
+}
+
+.input::placeholder {
+  color: var(--color-neutral-400);
+}
+
+.input:focus {
+  border-color: var(--color-gold);
+  box-shadow: 0 0 0 3px rgb(201 169 98 / 0.15);
+}
+
+.input-error {
+  border-color: var(--color-error);
+}
+
+.input-error:focus {
+  box-shadow: 0 0 0 3px rgb(239 68 68 / 0.15);
+}
+
+/* ── Skeleton / Loading States ────────────────────────────── */
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-neutral-200) 25%,
+    var(--color-neutral-100) 50%,
+    var(--color-neutral-200) 75%
+  );
+  background-size: 200% 100%;
+  animation: var(--animate-shimmer);
+  border-radius: var(--radius-md);
+}
+
+.skeleton-text {
+  height: 1em;
+  border-radius: var(--radius-sm);
+}
+
+.skeleton-circle {
+  border-radius: var(--radius-full);
+}
+
+/* ── Glass Morphism ───────────────────────────────────────── */
+
+.glass {
+  background: rgb(255 255 255 / 0.08);
+  backdrop-filter: blur(12px) saturate(1.4);
+  -webkit-backdrop-filter: blur(12px) saturate(1.4);
+  border: 1px solid rgb(255 255 255 / 0.12);
+}
+
+.glass-sand {
+  background: rgb(245 241 235 / 0.85);
+  backdrop-filter: blur(16px) saturate(1.6);
+  -webkit-backdrop-filter: blur(16px) saturate(1.6);
+  border: 1px solid rgb(245 241 235 / 0.3);
+}
+
+.glass-dark {
+  background: rgb(26 22 20 / 0.7);
+  backdrop-filter: blur(16px) saturate(1.4);
+  -webkit-backdrop-filter: blur(16px) saturate(1.4);
+  border: 1px solid rgb(255 255 255 / 0.06);
+}
+
+/* ── Gradient Text ────────────────────────────────────────── */
+
+.text-gradient-gold {
+  background: var(--gradient-gold);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ── Trust Banner Track (horizontal marquee) ──────────────── */
+
+.trust-track {
+  display: flex;
+  gap: 4rem;
+  animation: var(--animate-scroll);
+  white-space: nowrap;
+  will-change: transform;
+}
+
+.trust-track:hover {
+  animation-play-state: paused;
+}
+
+/* ── Section Headers ──────────────────────────────────────── */
+
+.section-header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  text-align: center;
+}
+
+.section-header-left {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+/* ── Overlay utilities ────────────────────────────────────── */
+
+.hero-overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-hero-overlay);
+  pointer-events: none;
+}
+
+/* ============================================================
+ * SCROLLBAR STYLING (webkit)
+ * ============================================================ */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-sand);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-sand-darker);
+  border-radius: var(--radius-full);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-gold-dark);
+}
+
+/* ============================================================
+ * SELECTION COLOUR
+ * ============================================================ */
+
+::selection {
+  background: rgb(201 169 98 / 0.25);
+  color: var(--color-primary);
+}
+
+/* ============================================================
+ * PRINT
+ * ============================================================ */
+
+@media print {
+  body {
+    background: #fff;
+    color: #000;
+  }
+
+  .no-print {
+    display: none !important;
+  }
 }

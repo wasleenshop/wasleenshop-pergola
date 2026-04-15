@@ -1,0 +1,470 @@
+/* ============================================================
+ * WASLEEN PERGOLAS — ANIMATION SYSTEM
+ * All keyframe definitions + animation utility classes.
+ * Imported by globals.css via @import.
+ * Uses CSS custom properties aligned with --animate-* tokens
+ * in the @theme block.
+ * ============================================================ */
+
+/* ============================================================
+ * KEYFRAMES
+ * ============================================================ */
+
+/* ── Fade variants ────────────────────────────────────────── */
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Slide variants ────────────────────────────────────────── */
+
+@keyframes slideInLeft {
+  from {
+    opacity: 0;
+    transform: translateX(-40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ── Scale variants ───────────────────────────────────────── */
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.88);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes scaleInBounce {
+  0% {
+    opacity: 0;
+    transform: scale(0.75);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ── Loading / Skeleton ───────────────────────────────────── */
+
+@keyframes shimmer {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.5; }
+}
+
+/* ── Trust Banner / Marquee ───────────────────────────────── */
+
+@keyframes scroll {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+@keyframes scrollReverse {
+  0%   { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+
+/* ── Brand / Gold ─────────────────────────────────────────── */
+
+@keyframes pulseGold {
+  0%, 100% { box-shadow: 0 0 0 0 rgb(201 169 98 / 0); }
+  50%       { box-shadow: 0 0 0 12px rgb(201 169 98 / 0); }
+}
+
+@keyframes glowGold {
+  0%, 100% { filter: drop-shadow(0 0 4px rgb(201 169 98 / 0.4)); }
+  50%       { filter: drop-shadow(0 0 12px rgb(201 169 98 / 0.8)); }
+}
+
+/* ── Float (product cards / hero badges) ──────────────────── */
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(-8px); }
+}
+
+/* ── WhatsApp / CTA Button bounce ────────────────────────── */
+
+@keyframes bounceSoft {
+  0%, 100% { transform: translateY(0); }
+  20%       { transform: translateY(-6px); }
+  40%       { transform: translateY(0); }
+  60%       { transform: translateY(-3px); }
+  80%       { transform: translateY(0); }
+}
+
+/* ── Spin (loading spinners) ──────────────────────────────── */
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ── Counter / number reveal ──────────────────────────────── */
+
+@keyframes countUp {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0); opacity: 1; }
+}
+
+/* ── Ripple (button click feedback) ──────────────────────── */
+
+@keyframes ripple {
+  0% {
+    transform: scale(0);
+    opacity: 0.6;
+  }
+  100% {
+    transform: scale(4);
+    opacity: 0;
+  }
+}
+
+/* ── Draw line (SVG strokes / underline reveals) ──────────── */
+
+@keyframes drawLine {
+  from { stroke-dashoffset: 1; }
+  to   { stroke-dashoffset: 0; }
+}
+
+/* ── Accordion / expand ───────────────────────────────────── */
+
+@keyframes expandHeight {
+  from {
+    max-height: 0;
+    opacity: 0;
+  }
+  to {
+    max-height: 1000px;
+    opacity: 1;
+  }
+}
+
+/* ── Toast entry ──────────────────────────────────────────── */
+
+@keyframes slideInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(100%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes slideInFromTop {
+  from {
+    opacity: 0;
+    transform: translateY(-100%) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ── Hero image zoom (Ken-Burns effect) ───────────────────── */
+
+@keyframes kenBurns {
+  0%   { transform: scale(1) translateX(0) translateY(0); }
+  50%  { transform: scale(1.08) translateX(-1%) translateY(-1%); }
+  100% { transform: scale(1) translateX(0) translateY(0); }
+}
+
+/* ── Progress bar ─────────────────────────────────────────── */
+
+@keyframes progressFill {
+  from { width: 0; }
+  to   { width: var(--progress-value, 100%); }
+}
+
+/* ============================================================
+ * ANIMATION UTILITY CLASSES
+ * Apply these classes directly in JSX/HTML.
+ * Pair with `animation-delay-*` utilities from Tailwind or
+ * inline style for staggered reveals.
+ * ============================================================ */
+
+/* ── Entrance animations (one-shot) ───────────────────────── */
+
+.animate-fade-in {
+  animation: fadeIn 0.4s ease both;
+}
+
+.animate-fade-out {
+  animation: fadeOut 0.3s ease both;
+}
+
+.animate-fade-in-up {
+  animation: fadeInUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-fade-in-down {
+  animation: fadeInDown 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-slide-in-left {
+  animation: slideInLeft 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-slide-in-right {
+  animation: slideInRight 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-slide-in-up {
+  animation: slideInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-scale-in {
+  animation: scaleIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+.animate-scale-in-bounce {
+  animation: scaleInBounce 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* ── Looping (infinite) ───────────────────────────────────── */
+
+.animate-shimmer {
+  animation: shimmer 1.8s linear infinite;
+}
+
+.animate-scroll {
+  animation: scroll 30s linear infinite;
+}
+
+.animate-scroll-reverse {
+  animation: scrollReverse 30s linear infinite;
+}
+
+.animate-scroll-fast {
+  animation: scroll 18s linear infinite;
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-pulse-gold {
+  animation: pulseGold 2s ease-in-out infinite;
+}
+
+.animate-glow-gold {
+  animation: glowGold 2.5s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 4s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-bounce-soft {
+  animation: bounceSoft 2s ease-in-out infinite;
+}
+
+.animate-spin-slow {
+  animation: spin 8s linear infinite;
+}
+
+.animate-ken-burns {
+  animation: kenBurns 16s ease-in-out infinite;
+}
+
+/* ── Toast / notification entry ───────────────────────────── */
+
+.animate-slide-from-bottom {
+  animation: slideInFromBottom 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-slide-from-top {
+  animation: slideInFromTop 0.35s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* ── Progress ─────────────────────────────────────────────── */
+
+.animate-progress {
+  animation: progressFill 1s ease both;
+}
+
+/* ============================================================
+ * ANIMATION DELAY HELPERS
+ * Use for staggered reveals (e.g., product card grids).
+ * ============================================================ */
+
+.delay-75   { animation-delay: 75ms; }
+.delay-100  { animation-delay: 100ms; }
+.delay-150  { animation-delay: 150ms; }
+.delay-200  { animation-delay: 200ms; }
+.delay-300  { animation-delay: 300ms; }
+.delay-400  { animation-delay: 400ms; }
+.delay-500  { animation-delay: 500ms; }
+.delay-600  { animation-delay: 600ms; }
+.delay-700  { animation-delay: 700ms; }
+.delay-800  { animation-delay: 800ms; }
+.delay-1000 { animation-delay: 1000ms; }
+
+/* ============================================================
+ * SCROLL-DRIVEN ANIMATION HELPERS
+ * Opt-in classes for Intersection Observer reveals.
+ * JS toggles `.is-visible` on elements when they enter viewport.
+ * ============================================================ */
+
+/* Initial hidden state */
+.reveal {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-left {
+  opacity: 0;
+  transform: translateX(-30px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-right {
+  opacity: 0;
+  transform: translateX(30px);
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.reveal-scale {
+  opacity: 0;
+  transform: scale(0.92);
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+              transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Visible state (toggled by IntersectionObserver hook) */
+.reveal.is-visible,
+.reveal-left.is-visible,
+.reveal-right.is-visible,
+.reveal-scale.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* ============================================================
+ * TRANSITION UTILITIES
+ * ============================================================ */
+
+.transition-gold {
+  transition: color var(--transition-base),
+              background-color var(--transition-base),
+              border-color var(--transition-base),
+              box-shadow var(--transition-base);
+}
+
+.transition-transform-smooth {
+  transition: transform var(--transition-base);
+}
+
+.transition-all-spring {
+  transition: all var(--transition-spring);
+}
+
+/* ============================================================
+ * REDUCED-MOTION OVERRIDES
+ * Honour user system preference from globals.css @media block.
+ * Explicitly nullify infinite animations.
+ * ============================================================ */
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-scroll,
+  .animate-scroll-reverse,
+  .animate-scroll-fast,
+  .animate-float,
+  .animate-float-slow,
+  .animate-bounce-soft,
+  .animate-spin-slow,
+  .animate-ken-burns,
+  .animate-pulse-gold,
+  .animate-glow-gold,
+  .animate-shimmer,
+  .trust-track {
+    animation: none !important;
+  }
+
+  .reveal,
+  .reveal-left,
+  .reveal-right,
+  .reveal-scale {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
