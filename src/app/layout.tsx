@@ -9,6 +9,7 @@ import { CartDrawer } from "@/components/cart/CartDrawer";
 import { getInitialCart } from "@/lib/shopify/actions/cart";
 import { CustomerProvider } from "@/contexts/CustomerContext";
 import { getInitialCustomer } from "@/lib/shopify/customer-operations";
+import { Analytics, GTMNoScript } from "@/components/Analytics";
 
 /* ── Google Fonts — self-hosted via next/font ─────────────── */
 
@@ -102,6 +103,8 @@ export default async function RootLayout({
       className={`${inter.variable} ${playfair.variable} ${tajawal.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col font-sans bg-sand text-primary">
+        {/* GTM noscript — must be the first child of <body> */}
+        <GTMNoScript />
         <CustomerProvider initialCustomer={initialCustomer}>
           <CartProvider initialCart={initialCart}>
             <TrustBanner />
@@ -112,6 +115,8 @@ export default async function RootLayout({
             <CartDrawer />
           </CartProvider>
         </CustomerProvider>
+        {/* GTM + GA4 scripts + SPA route tracker */}
+        <Analytics />
       </body>
     </html>
   );
