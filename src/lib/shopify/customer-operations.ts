@@ -39,9 +39,17 @@ const SITE_URL    = (process.env.NEXT_PUBLIC_SITE_URL ?? "https://shop.wasleen.c
  */
 const REDIRECT_URI = `${SITE_URL}/account/oauth/callback`;
 
-/** Scopes: openid for id_token, email for profile, graphql for future API calls */
-const OAUTH_SCOPES =
-  "openid email https://api.customers.com/auth/customer.graphql";
+/**
+ * Scopes for the Customer Account API OAuth flow.
+ * - openid: required for id_token (provides sub, given_name, family_name)
+ * - email:  provides email claim in the id_token
+ * - profile: provides name claims (given_name, family_name)
+ *
+ * Note: https://api.customers.com/auth/customer.graphql is NOT included —
+ * it requires separate app configuration in Shopify and is not needed here
+ * because customer profile data is decoded entirely from the id_token JWT.
+ */
+const OAUTH_SCOPES = "openid email profile";
 
 // ── Cookie names + lifetimes ──────────────────────────────────────
 
