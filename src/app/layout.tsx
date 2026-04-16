@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Playfair_Display, Tajawal } from "next/font/google";
+import { Suspense } from "react";
 import "./globals.css";
 import { TrustBanner } from "@/components/layout/TrustBanner";
 import { Header } from "@/components/layout/Header";
@@ -17,7 +18,6 @@ const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
-  // Weights used across the design system
   weight: ["300", "400", "500", "600", "700"],
   preload: true,
 });
@@ -26,7 +26,6 @@ const playfair = Playfair_Display({
   variable: "--font-playfair",
   subsets: ["latin"],
   display: "swap",
-  // Playfair is a variable font — all weights available automatically
   weight: ["400", "500", "600", "700", "800", "900"],
   preload: true,
 });
@@ -36,7 +35,7 @@ const tajawal = Tajawal({
   subsets: ["arabic"],
   display: "swap",
   weight: ["300", "400", "500", "700", "800"],
-  preload: false, // Only loaded when Arabic content is present
+  preload: false,
 });
 
 /* ── Viewport config ──────────────────────────────────────── */
@@ -83,19 +82,24 @@ export const metadata: Metadata = {
 };
 
 /* ── Root Layout ──────────────────────────────────────────── */
+//
+// RootLayout is intentionally synchronous — no runtime API access here.
+//
+// cacheComponents: true requires that any access to request-time APIs
+// (cookies, headers, searchParams) happens inside a <Suspense> boundary.
+// Since the cart and customer both read httpOnly cookies, they are moved
+// into <DynamicChrome>, an async Server Component wrapped in <Suspense>.
+//
+// Per the Next.js docs: placing a <Suspense> with a null fallback above the
+// document body causes the entire app to defer to request time, which is
+// correct for an e-commerce app where every page depends on per-user
+// cart/session state.
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  // Fetch cart + customer in parallel — both are server-side reads from
-  // httpOnly cookies, so there is zero loading flash on first render.
-  const [initialCart, initialCustomer] = await Promise.all([
-    getInitialCart(),
-    getInitialCustomer(),
-  ]);
-
   return (
     <html
       lang="en"
@@ -105,19 +109,48 @@ export default async function RootLayout({
       <body className="min-h-full flex flex-col font-sans bg-sand text-primary">
         {/* GTM noscript — must be the first child of <body> */}
         <GTMNoScript />
-        <CustomerProvider initialCustomer={initialCustomer}>
-          <CartProvider initialCart={initialCart}>
-            <TrustBanner />
-            <Header />
-            {children}
-            <Footer />
-            {/* Portal-rendered — mounts to document.body via createPortal */}
-            <CartDrawer />
-          </CartProvider>
-        </CustomerProvider>
+
+        {/*
+          DynamicChrome reads cookies (cart + customer) so it must be
+          inside <Suspense>. The null fallback defers all routes to
+          request time — correct because every page needs per-user state.
+        */}
+        <Suspense fallback={null}>
+          <DynamicChrome>{children}</DynamicChrome>
+        </Suspense>
+
         {/* GTM + GA4 scripts + SPA route tracker */}
         <Analytics />
       </body>
     </html>
+  );
+}
+
+/* ── Dynamic chrome (per-request) ─────────────────────────── */
+
+async function DynamicChrome({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  // Both reads are cookie-based: getInitialCustomer decodes a JWT from
+  // an httpOnly cookie; getInitialCart reads a cart-id cookie and may
+  // fetch from the Shopify Storefront API if a cart exists.
+  const [initialCart, initialCustomer] = await Promise.all([
+    getInitialCart(),
+    getInitialCustomer(),
+  ]);
+
+  return (
+    <CustomerProvider initialCustomer={initialCustomer}>
+      <CartProvider initialCart={initialCart}>
+        <TrustBanner />
+        <Header />
+        {children}
+        <Footer />
+        {/* Portal-rendered — mounts to document.body via createPortal */}
+        <CartDrawer />
+      </CartProvider>
+    </CustomerProvider>
   );
 }
