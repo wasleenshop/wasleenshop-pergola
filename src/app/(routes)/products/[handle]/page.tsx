@@ -238,7 +238,7 @@ function Breadcrumbs({
 }
 
 // ─────────────────────────────────────────────────────────────────
-// Skeleton for related products Suspense fallback
+// Skeleton fallbacks
 // ─────────────────────────────────────────────────────────────────
 
 function RelatedSkeleton() {
@@ -251,11 +251,43 @@ function RelatedSkeleton() {
   );
 }
 
+function ProductPageSkeleton() {
+  return (
+    <main className="min-h-screen animate-pulse">
+      <section className="container-site pt-6 pb-12 lg:pb-16">
+        <div className="h-4 w-48 bg-neutral-100 rounded mb-6" />
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+          <div className="aspect-square bg-neutral-100 rounded-2xl" />
+          <div className="space-y-4">
+            <div className="h-8 w-3/4 bg-neutral-100 rounded" />
+            <div className="h-6 w-1/3 bg-neutral-100 rounded" />
+            <div className="h-4 w-full bg-neutral-100 rounded" />
+            <div className="h-4 w-5/6 bg-neutral-100 rounded" />
+            <div className="h-12 w-full bg-neutral-100 rounded-xl mt-6" />
+          </div>
+        </div>
+      </section>
+    </main>
+  );
+}
+
 // ─────────────────────────────────────────────────────────────────
-// Page
+// Page shell (sync — prerenders)
 // ─────────────────────────────────────────────────────────────────
 
-export default async function ProductPage({ params }: PageProps) {
+export default function ProductPage({ params }: PageProps) {
+  return (
+    <Suspense fallback={<ProductPageSkeleton />}>
+      <ProductContent params={params} />
+    </Suspense>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────
+// Dynamic content (async — awaits runtime params + Shopify fetches)
+// ─────────────────────────────────────────────────────────────────
+
+async function ProductContent({ params }: { params: Promise<{ handle: string }> }) {
   const { handle } = await params;
 
   // Phase 1: fetch the product (needed for ID before parallel fetches)
@@ -270,11 +302,6 @@ export default async function ProductPage({ params }: PageProps) {
     getProductRating(product.id),
     getProductRecommendations(product.id),
   ]);
-
-  // Collection context for breadcrumbs (first collection the product belongs to)
-  const firstCollection = product.tags
-    .find((t) => t.startsWith("collection:"))
-    ?.replace("collection:", "");
 
   return (
     <>

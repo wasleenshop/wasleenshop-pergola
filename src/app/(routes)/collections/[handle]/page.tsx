@@ -135,13 +135,26 @@ function GridSkeleton() {
 }
 
 // ─────────────────────────────────────────────────────────────────
-// Page
+// Page shell (sync — prerenders)
 // ─────────────────────────────────────────────────────────────────
 
-export default async function CollectionPage({
-  params,
-  searchParams,
-}: PageProps) {
+export default function CollectionPage({ params, searchParams }: PageProps) {
+  return (
+    <main className="min-h-screen">
+      <div className="container-site section-py">
+        <Suspense fallback={<GridSkeleton />}>
+          <CollectionContent params={params} searchParams={searchParams} />
+        </Suspense>
+      </div>
+    </main>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────────
+// Dynamic content (async — awaits runtime params + searchParams)
+// ─────────────────────────────────────────────────────────────────
+
+async function CollectionContent({ params, searchParams }: PageProps) {
   const { handle } = await params;
   const sp = await searchParams;
 
@@ -171,19 +184,12 @@ export default async function CollectionPage({
   return (
     <>
       <CollectionJsonLd handle={handle} title={collection.title} />
-
-      <main className="min-h-screen">
-        <div className="container-site section-py">
-          <Suspense fallback={<GridSkeleton />}>
-            <CollectionPageClient
-              handle={handle}
-              collection={collection}
-              initialProducts={products}
-              initialPageInfo={pageInfo}
-            />
-          </Suspense>
-        </div>
-      </main>
+      <CollectionPageClient
+        handle={handle}
+        collection={collection}
+        initialProducts={products}
+        initialPageInfo={pageInfo}
+      />
     </>
   );
 }
