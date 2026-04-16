@@ -37,12 +37,6 @@ import { RelatedProducts } from "@/components/product/RelatedProducts";
 import { ProductCardSkeleton } from "@/components/product/ProductCard";
 
 // ─────────────────────────────────────────────────────────────────
-// ISR config
-// ─────────────────────────────────────────────────────────────────
-
-export const revalidate = 300; // 5 minutes
-
-// ─────────────────────────────────────────────────────────────────
 // Route params
 // ─────────────────────────────────────────────────────────────────
 

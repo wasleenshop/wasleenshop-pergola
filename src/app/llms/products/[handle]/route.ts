@@ -17,8 +17,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { getProductByHandle, formatMoney } from "@/lib/shopify";
 import type { Product, ProductMetafields, ProductVariant, MoneyV2 } from "@/lib/shopify";
 
-export const revalidate = 1800; // 30 minutes
-
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://shop.wasleen.com";
 
 // ── Formatting helpers ──────────────────────────────────────

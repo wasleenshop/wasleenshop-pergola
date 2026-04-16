@@ -32,12 +32,6 @@ import { CollectionPageClient } from "@/components/collection/CollectionPageClie
 import { ProductCardSkeleton } from "@/components/product/ProductCard";
 
 // ─────────────────────────────────────────────────────────────────
-// ISR config
-// ─────────────────────────────────────────────────────────────────
-
-export const revalidate = 600; // 10 minutes
-
-// ─────────────────────────────────────────────────────────────────
 // Route params
 // ─────────────────────────────────────────────────────────────────
 

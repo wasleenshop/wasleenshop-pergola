@@ -15,8 +15,6 @@ import { NextResponse } from "next/server";
 import { getAllCollections } from "@/lib/shopify";
 import type { CollectionCard } from "@/lib/shopify";
 
-export const revalidate = 3600; // 1 hour
-
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://shop.wasleen.com";
 
 // ── Markdown builder ────────────────────────────────────────

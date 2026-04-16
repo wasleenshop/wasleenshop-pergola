@@ -16,8 +16,6 @@ import { NextRequest, NextResponse } from "next/server";
 import { getCollectionByHandle, getCollectionProducts, formatMoney } from "@/lib/shopify";
 import type { ProductCard, ProductMetafields } from "@/lib/shopify";
 
-export const revalidate = 3600; // 1 hour
-
 const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL ?? "https://shop.wasleen.com";
 
 // ── Spec summary helper ─────────────────────────────────────
