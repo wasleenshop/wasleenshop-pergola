@@ -6,7 +6,7 @@ import { CACHE_TAGS } from "../constants";
 
 const GET_HOMEPAGE_HERO_METAOBJECT_QUERY = /* GraphQL */ `
   query GetHomepageHeroMetaobject($type: String!, $handle: String!) {
-    metaobjectByHandle(handle: { type: $type, handle: $handle }) {
+    metaobject(handle: { type: $type, handle: $handle }) {
       id
       handle
       type
@@ -56,9 +56,6 @@ type MetaobjectReference =
         url?: string | null;
         mimeType?: string | null;
       }> | null;
-    }
-  | {
-      __typename: string;
     };
 
 interface MetaobjectFieldRaw {
@@ -69,7 +66,7 @@ interface MetaobjectFieldRaw {
 }
 
 interface ApiResponse {
-  metaobjectByHandle: {
+  metaobject: {
     id: string;
     handle: string;
     type: string;
@@ -129,9 +126,9 @@ export async function getHomepageHeroContent(options?: {
     handle,
   });
 
-  if (!data.metaobjectByHandle) return null;
+  if (!data.metaobject) return null;
 
-  const fields = data.metaobjectByHandle.fields ?? [];
+  const fields = data.metaobject.fields ?? [];
   const title = getField(fields, "Title")?.value?.trim() || "Transform Your Outdoor Space";
   const videoDesktop = normaliseFileUrl(getField(fields, "video_desktop"));
   const videoMobile = normaliseFileUrl(getField(fields, "video_mobile"));
