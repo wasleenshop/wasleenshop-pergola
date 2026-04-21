@@ -6,6 +6,8 @@ import { ChevronDown, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/Button";
 
 export interface HeroSectionProps {
+  /** Hero title fetched from Shopify metaobject */
+  title?: string;
   /** Desktop landscape video URL (16:9) — from Shopify metafield */
   videoDesktop?: string;
   /** Mobile portrait video URL (9:16) — from Shopify metafield */
@@ -18,6 +20,7 @@ export interface HeroSectionProps {
 
 // Static fallback values — replace with real /public assets before launch
 const FALLBACKS = {
+  title: "Transform Your Outdoor Space Into a Luxury Oasis",
   videoDesktop: "",
   videoMobile: "",
   posterDesktop: "/images/hero-poster-desktop.jpg",
@@ -27,6 +30,7 @@ const FALLBACKS = {
 const WHATSAPP_URL = `https://wa.me/${process.env.NEXT_PUBLIC_WHATSAPP_NUMBER ?? "971567648220"}`;
 
 export function HeroSection({
+  title = FALLBACKS.title,
   videoDesktop = FALLBACKS.videoDesktop,
   videoMobile = FALLBACKS.videoMobile,
   posterDesktop = FALLBACKS.posterDesktop,
@@ -121,18 +125,26 @@ export function HeroSection({
         />
       )}
 
-      {/* Gradient overlay */}
+      {/* Premium overlays for readability and cinematic depth */}
       <div
-        className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-black/70 pointer-events-none"
+        className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/35 to-black/85 pointer-events-none"
+        aria-hidden="true"
+      />
+      <div
+        className="absolute inset-0 bg-[radial-gradient(circle_at_30%_25%,rgba(201,169,98,0.28),transparent_38%),radial-gradient(circle_at_75%_70%,rgba(255,255,255,0.08),transparent_40%)] pointer-events-none"
         aria-hidden="true"
       />
 
       {/* Content */}
       <div className="relative z-10 container-site px-6 w-full flex flex-col items-center justify-center text-center mt-12 md:mt-0">
-        <div className="space-y-6 max-w-4xl mx-auto animate-fade-in-up">
-          <h1 className="type-display-lg text-white drop-shadow-md">
-            Transform Your Outdoor Space Into a{" "}
-            <span className="text-gradient-gold">Luxury Oasis</span>
+        <div className="space-y-7 max-w-5xl mx-auto animate-fade-in-up">
+          <p className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-black/20 px-4 py-1.5 text-xs md:text-sm uppercase tracking-[0.2em] text-white/90 backdrop-blur-md">
+            <span className="h-2 w-2 rounded-full bg-gold shadow-[0_0_10px_rgba(201,169,98,0.95)]" />
+            Premium Outdoor Living
+          </p>
+
+          <h1 className="type-display-lg text-white drop-shadow-[0_8px_24px_rgba(0,0,0,0.55)] leading-tight">
+            {title}
           </h1>
 
           <p className="type-body-lg md:text-xl text-neutral-200 font-medium tracking-wide drop-shadow-sm max-w-2xl mx-auto">
@@ -145,7 +157,10 @@ export function HeroSection({
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-6 animate-fade-in-up delay-200">
             <Link href="/collections" className="w-full sm:w-auto">
-              <Button size="lg" className="w-full shadow-gold-lg hover:shadow-gold">
+              <Button
+                size="lg"
+                className="w-full shadow-gold-lg hover:shadow-gold px-8 md:px-10"
+              >
                 Explore Collections
               </Button>
             </Link>
@@ -154,7 +169,7 @@ export function HeroSection({
               <Button
                 size="lg"
                 variant="ghost-light"
-                className="w-full backdrop-blur-sm"
+                className="w-full backdrop-blur-sm border border-white/30"
               >
                 Custom Design
               </Button>
@@ -168,7 +183,7 @@ export function HeroSection({
             >
               <Button
                 size="lg"
-                className="w-full bg-[#25D366] text-white hover:bg-[#128C7E] border-none shadow-md"
+                className="w-full bg-[#25D366] text-white hover:bg-[#128C7E] border-none shadow-md px-8 md:px-10"
               >
                 <MessageCircle size={20} aria-hidden="true" />
                 WhatsApp Us

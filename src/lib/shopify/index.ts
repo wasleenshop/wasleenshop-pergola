@@ -27,6 +27,8 @@ export {
   getCollectionWithProducts,
   getCollectionsByHandles,
 } from "./queries/collection";
+export { getHomepageHeroContent } from "./queries/metaobject";
+export type { HomepageHeroContent } from "./queries/metaobject";
 
 export type {
   CollectionFilter,

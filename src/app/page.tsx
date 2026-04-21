@@ -32,6 +32,7 @@ import { HowItWorks } from "@/components/home/HowItWorks";
 import { BlogPreview } from "@/components/home/BlogPreview";
 import { Newsletter } from "@/components/home/Newsletter";
 import { ScrollReveal } from "@/components/ui/ScrollReveal";
+import { getHomepageHeroContent } from "@/lib/shopify";
 
 // ─────────────────────────────────────────────────────────────────
 // Skeleton placeholder used as Suspense fallback
@@ -50,12 +51,18 @@ function SectionSkeleton({ height = "h-96" }: { height?: string }) {
 // Page
 // ─────────────────────────────────────────────────────────────────
 
-export default function HomePage() {
+export default async function HomePage() {
+  const heroContent = await getHomepageHeroContent();
+
   return (
     <>
       <main className="flex flex-col flex-1">
         {/* 1. Hero — built in Session 9 */}
-        <HeroSection />
+        <HeroSection
+          title={heroContent?.title}
+          videoDesktop={heroContent?.videoDesktop}
+          videoMobile={heroContent?.videoMobile}
+        />
 
         {/* 2. Category Cards — server, fetches 4 Shopify collections */}
         <Suspense fallback={<SectionSkeleton height="h-[700px]" />}>
